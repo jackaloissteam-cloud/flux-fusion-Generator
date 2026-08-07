@@ -7,3 +7,17 @@ uri = "file://.agents/outputs/flux-fusion-generator-code.zip"
 type = "unspecified"
 title = "Flux Stil-Fusion Generator – Quellcode"
 description = "ZIP mit dem vollständigen React/Vite-App-Code inklusive der erweiterten Prompt-Parameter, Upload-Vorschau und Konfiguration. Node-Module und Build-Output sind nicht enthalten."
+
+[[outputs]]
+id = "CwOFx5Qinnvy-SxRfsVIB"
+uri = "file://.agents/outputs/flux-stil-fusion-generator.html"
+type = "unspecified"
+title = "Flux Stil-Fusion Generator – ausführbare HTML"
+description = "Einzelne HTML-Datei zum Herunterladen und direkten Öffnen im Browser. Enthält Generator, Stilparameter, Seitenverhältnis, Negative Prompt, Seed, Batch Count und Referenzbild-Vorschau."
+
+[[outputs]]
+id = "KvVPh6ukSBWqHMeoAo9dV"
+uri = "file://.agents/outputs/flux-generator.zip"
+type = "unspecified"
+title = "Flux Stil-Fusion Generator – ZIP"
+description = "Kompaktes ZIP mit dem vollständigen React/Vite-Quellcode ohne node_modules und Build-Output."
