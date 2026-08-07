@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Flux Stil-Fusion Generator</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 16px; background:#111; color:#eee; }
+    h1, h2 { color:#ffd86b; }
+    label { display:block; margin-top:10px; font-weight:600; }
+    select, button, textarea {
+      width:100%; max-width:600px; margin-top:4px; padding:6px;
+      background:#222; color:#eee; border:1px solid #444; border-radius:4px;
+    }
+    button { margin-top:12px; cursor:pointer; }
+    textarea { height:160px; }
+    .row { max-width:700px; margin-bottom:12px; }
+  </style>
+</head>
+<body>
+  <h1>Flux Stil-Fusion Generator</h1>
+  <p>Wähle deine Optionen und klicke auf „Prompt erzeugen“ – der fertige Prompt erscheint unten.</p>
+
+  <div class="row">
+    <label for="motif">Motiv</label>
+    <select id="motif">
+      <option>Portrait</option>
+      <option>Landschaft</option>
+      <option>Sci-Fi</option>
+      <option>Fantasy</option>
+      <option>Surrealismus</option>
+      <option>Architektur</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="artistA">Künstler A (Basisstil)</label>
+    <select id="artistA">
+      <option>J.M.W. Turner</option>
+      <option>John Berkey</option>
+      <option>Zdzisław Beksiński</option>
+      <option>Caravaggio</option>
+      <option>Roy Lichtenstein</option>
+      <option>Romero Britto</option>
+      <option>Atey Ghailan</option>
+      <option>Krenz Cushart</option>
+      <option>Ray Caesar</option>
+      <option>Takeshi Obata</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="artistB">Künstler B (Fusion)</label>
+    <select id="artistB">
+      <option>John Berkey</option>
+      <option>J.M.W. Turner</option>
+      <option>Zdzisław Beksiński</option>
+      <option>Caravaggio</option>
+      <option>Roy Lichtenstein</option>
+      <option>Romero Britto</option>
+      <option>Atey Ghailan</option>
+      <option>Krenz Cushart</option>
+      <option>Ray Caesar</option>
+      <option>Takeshi Obata</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="fusion">Fusionstyp</label>
+    <select id="fusion">
+      <option>Atmosphärische Sci-Fi-Romantik</option>
+      <option>Düstere Manga-Surrealwelt</option>
+      <option>Neon-Pop-Comic</option>
+      <option>Barock-Fashion-Manga</option>
+      <option>Cinematic Dark Fantasy</option>
+      <option>Digital Surreal Couture</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="composition">Komposition</label>
+    <select id="composition">
+      <option>Weitwinkel</option>
+      <option>Close-Up</option>
+      <option>Dramatische Perspektive</option>
+      <option>Zentralperspektive</option>
+      <option>Vogelperspektive</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="lighting">Licht</label>
+    <select id="lighting">
+      <option>Cinematic Lighting</option>
+      <option>Golden Hour</option>
+      <option>Chiaroscuro</option>
+      <option>Soft Diffused Light</option>
+      <option>Hard Rim Light</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="palette">Farbwelt</label>
+    <select id="palette">
+      <option>Gedämpft</option>
+      <option>Neon</option>
+      <option>Pastell</option>
+      <option>Erdig</option>
+      <option>Monochrom</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <label for="detail">Detailgrad</label>
+    <select id="detail">
+      <option>Hyperdetailliert</option>
+      <option>Malerisch</option>
+      <option>Fotorealistisch</option>
+      <option>Minimalistisch</option>
+    </select>
+  </div>
+
+  <button onclick="generatePrompt()">Prompt erzeugen</button>
+
+  <div class="row">
+    <label for="output">Generierter Prompt</label>
+    <textarea id="output" readonly></textarea>
+  </div>
+
+  <script>
+    function generatePrompt() {
+      const motif = document.getElementById('motif').value;
+      const a = document.getElementById('artistA').value;
+      const b = document.getElementById('artistB').value;
+      const fusion = document.getElementById('fusion').value;
+      const comp = document.getElementById('composition').value;
+      const light = document.getElementById('lighting').value;
+      const palette = document.getElementById('palette').value;
+      const detail = document.getElementById('detail').value;
+
+      const prompt =
+        motif + " im Stil von " + a + " + " + b + ", " +
+        "Fusion: " + fusion + ", " +
+        "Komposition: " + comp + ", " +
+        "Licht: " + light + ", " +
+        "Farbwelt: " + palette + ", " +
+        "Detailgrad: " + detail + ", " +
+        "Rendering: hochauflösend, sauber, klar.";
+
+      document.getElementById('output').value = prompt;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Flux Stil-Fusion Generator"
+description = "Eine deutschsprachige Prompt-Generator-App, die Motiv, Künstlerstile, Komposition, Licht, Farbwelt und Detailgrad zu einem hochwertigen Bildprompt kombiniert."
+version = "1.0.0"
+id = "artifacts/flux-fusion-generator"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23984
+
+[services.development]
+run = "pnpm --filter @workspace/flux-fusion-generator run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/flux-fusion-generator", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/flux-fusion-generator/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23984"
+BASE_PATH = "/"
