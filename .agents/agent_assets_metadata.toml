@@ -1,0 +1,9 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "h_35W7yVqofSQlqlLo6yq"
+uri = "file://.agents/outputs/flux-fusion-generator-code.zip"
+type = "unspecified"
+title = "Flux Stil-Fusion Generator – Quellcode"
+description = "ZIP mit dem vollständigen React/Vite-App-Code inklusive der erweiterten Prompt-Parameter, Upload-Vorschau und Konfiguration. Node-Module und Build-Output sind nicht enthalten."
