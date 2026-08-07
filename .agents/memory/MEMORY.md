@@ -1,0 +1,1 @@
+- [Flux generator inputs](flux-generator-inputs.md) — advanced settings and reference-image metadata stay client-side until an image service is requested.

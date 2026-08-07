@@ -376,6 +376,196 @@
   grid-column: 1 / -1;
 }
 
+.advanced-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 16px;
+  margin-top: 28px;
+  padding-top: 26px;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.field-help {
+  margin: -2px 0 11px;
+  color: hsl(var(--muted-foreground));
+  font-size: 12px;
+}
+
+.style-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.style-chip {
+  border: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  background: hsl(var(--card));
+  color: hsl(var(--muted-foreground));
+  padding: 8px 10px;
+  font-size: 12px;
+  transition: color 180ms ease, background 180ms ease, border 180ms ease, transform 180ms ease;
+}
+
+.style-chip:hover {
+  border-color: hsl(var(--accent));
+  color: hsl(var(--foreground));
+  transform: translateY(-1px);
+}
+
+.style-chip.selected {
+  border-color: hsl(var(--foreground));
+  background: hsl(var(--foreground));
+  color: hsl(var(--primary-foreground));
+}
+
+.field-input,
+.field-textarea {
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  outline: none;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  padding: 13px 15px;
+  font-size: 14px;
+  transition: border 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.field-input {
+  min-height: 50px;
+}
+
+.field-textarea {
+  min-height: 84px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.field-input:hover,
+.field-textarea:hover {
+  background: #fffdf5;
+  border-color: hsl(var(--muted-foreground));
+}
+
+.field-input:focus-visible,
+.field-textarea:focus-visible,
+.style-chip:focus-visible,
+.copy-button:focus-visible,
+.remove-image:focus-visible {
+  border-color: hsl(var(--accent));
+  box-shadow: 0 0 0 3px rgba(242, 106, 79, 0.18);
+  outline: none;
+}
+
+.upload-zone {
+  display: flex;
+  min-height: 118px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px dashed hsl(var(--muted-foreground));
+  border-radius: 13px;
+  background: rgba(250, 249, 243, 0.6);
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  cursor: pointer;
+  transition: background 180ms ease, border 180ms ease, color 180ms ease;
+}
+
+.upload-zone:hover {
+  border-color: hsl(var(--accent));
+  background: #fffdf5;
+  color: hsl(var(--foreground));
+}
+
+.upload-zone svg {
+  margin-bottom: 2px;
+  color: hsl(var(--accent));
+}
+
+.upload-zone span {
+  font-size: 13px;
+}
+
+.upload-zone strong {
+  color: hsl(var(--foreground));
+}
+
+.upload-zone small {
+  color: hsl(var(--muted-foreground));
+  font-family: var(--app-font-mono);
+  font-size: 9px;
+}
+
+.upload-zone input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reference-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 88px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 13px;
+  background: hsl(var(--card));
+  padding: 9px;
+}
+
+.reference-card img {
+  width: 70px;
+  height: 70px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.reference-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reference-info strong {
+  overflow: hidden;
+  color: hsl(var(--foreground));
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reference-info span {
+  color: hsl(var(--muted-foreground));
+  font-family: var(--app-font-mono);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.remove-image {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid hsl(var(--border));
+  border-radius: 50%;
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+}
+
+.remove-image:hover {
+  border-color: hsl(var(--accent));
+  color: hsl(var(--accent));
+}
+
 .field-label {
   display: flex;
   align-items: center;
@@ -739,6 +929,11 @@
   }
 
   .field-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .advanced-fields {
     grid-template-columns: 1fr;
     gap: 18px;
   }

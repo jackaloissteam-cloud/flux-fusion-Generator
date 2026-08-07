@@ -1,14 +1,16 @@
-import { useMemo, useState } from 'react';
+import { type ChangeEvent, useMemo, useState } from 'react';
 import {
   Check,
   Clipboard,
   Command,
   Copy,
+  ImagePlus,
   Info,
   Layers3,
   RotateCcw,
   Sparkles,
   WandSparkles,
+  X,
 } from 'lucide-react';
 
 type OptionKey =
@@ -22,6 +24,23 @@ type OptionKey =
   | 'detail';
 
 type FormState = Record<OptionKey, string>;
+
+const styleDetails = [
+  'realistic', 'photorealistic', 'digital draw style', 'detailed', 'artistic',
+  'Watercolor', 'cyberpunk', 'Aquarell', 'Kreide', 'Cartoon', 'Scetch',
+  'Ölgemälde', 'Bleistiftzeichnung', 'Strassenkunst', 'barock', 'Malbuch',
+  'Jugendstil', 'anthropomorph', 'vintage Boho', 'mittelalterlich', 'surreal',
+  'gruselig', 'tintenskizze', 'farbspritzer', 'niedlicher Charakter',
+  'miniatur diorama', 'Popart', 'inkpunk', '3D',
+];
+
+const aspectRatios = [
+  { label: 'Portrait', value: '4:5' },
+  { label: 'Quadrat', value: '1:1' },
+  { label: 'Querformat', value: '4:3' },
+  { label: 'Mobiles Porträt', value: '9:16' },
+  { label: 'Breit', value: '5:3' },
+];
 
 const options: Record<OptionKey, { label: string; values: string[] }> = {
   motif: {
@@ -95,6 +114,13 @@ const fieldOrder: OptionKey[] = ['motif', 'artistA', 'artistB', 'fusion', 'compo
 
 function App() {
   const [form, setForm] = useState<FormState>(initialState);
+  const [selectedStyles, setSelectedStyles] = useState<string[]>(['realistic', 'detailed']);
+  const [aspectRatio, setAspectRatio] = useState('4:5');
+  const [negativePrompt, setNegativePrompt] = useState('');
+  const [seed, setSeed] = useState('42');
+  const [batchCount, setBatchCount] = useState('1');
+  const [referenceImage, setReferenceImage] = useState<File | null>(null);
+  const [referencePreview, setReferencePreview] = useState('');
   const [prompt, setPrompt] = useState('');
   const [status, setStatus] = useState<'idle' | 'generated' | 'copied' | 'error'>('idle');
 
@@ -105,6 +131,28 @@ function App() {
     if (status !== 'idle') setStatus('idle');
   }
 
+  function toggleStyle(style: string) {
+    setSelectedStyles((current) =>
+      current.includes(style) ? current.filter((item) => item !== style) : [...current, style],
+    );
+    if (status !== 'idle') setStatus('idle');
+  }
+
+  function handleReferenceImage(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (referencePreview) URL.revokeObjectURL(referencePreview);
+    setReferenceImage(file);
+    setReferencePreview(URL.createObjectURL(file));
+    if (status !== 'idle') setStatus('idle');
+  }
+
+  function removeReferenceImage() {
+    if (referencePreview) URL.revokeObjectURL(referencePreview);
+    setReferenceImage(null);
+    setReferencePreview('');
+  }
+
   function generatePrompt() {
     const nextPrompt =
       `${form.motif} im Stil von ${form.artistA} + ${form.artistB}, ` +
@@ -113,6 +161,12 @@ function App() {
       `Licht: ${form.lighting}, ` +
       `Farbwelt: ${form.palette}, ` +
       `Detailgrad: ${form.detail}, ` +
+      `Art Style Details: ${selectedStyles.length ? selectedStyles.join(', ') : 'keine zusätzlichen Stil-Details'}, ` +
+      `Aspekt Ratio (--ar): ${aspectRatio}, ` +
+      `Negative Prompt: ${negativePrompt.trim() || 'keine'}, ` +
+      `Seed: ${seed || 'zufällig'}, ` +
+      `Anzahl Bilder (n): ${batchCount || '1'}, ` +
+      `Referenzbild: ${referenceImage ? `${referenceImage.name} — als Base Image für Komposition, Farben oder Stil` : 'keines'}, ` +
       'Rendering: hochauflösend, sauber, klar.';
     setPrompt(nextPrompt);
     setStatus('generated');
@@ -131,6 +185,12 @@ function App() {
 
   function resetAll() {
     setForm(initialState);
+    setSelectedStyles(['realistic', 'detailed']);
+    setAspectRatio('4:5');
+    setNegativePrompt('');
+    setSeed('42');
+    setBatchCount('1');
+    removeReferenceImage();
     setPrompt('');
     setStatus('idle');
   }
@@ -175,7 +235,7 @@ function App() {
                 <p className="panel-kicker">Deine Zutaten</p>
                 <h2 className="panel-title">Baue deine Fusion</h2>
               </div>
-              <span className="step-count">08 Parameter</span>
+              <span className="step-count">14 Parameter</span>
             </div>
 
             <div className="field-grid">
@@ -203,8 +263,143 @@ function App() {
               })}
             </div>
 
+            <div className="advanced-fields">
+              <div className="field field-wide">
+                <div className="field-label">
+                  Art Style Details
+                  <span>09</span>
+                </div>
+                <p className="field-help">Wähle einen oder mehrere visuelle Stilimpulse.</p>
+                <div className="style-chips" aria-label="Art Style Details">
+                  {styleDetails.map((style) => (
+                    <button
+                      className={`style-chip ${selectedStyles.includes(style) ? 'selected' : ''}`}
+                      type="button"
+                      key={style}
+                      aria-pressed={selectedStyles.includes(style)}
+                      onClick={() => toggleStyle(style)}
+                    >
+                      {style}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="field">
+                <label className="field-label" htmlFor="select-aspect-ratio">
+                  Aspekt Ratio
+                  <span>10</span>
+                </label>
+                <div className="select-wrap">
+                  <select
+                    className="field-select"
+                    id="select-aspect-ratio"
+                    value={aspectRatio}
+                    onChange={(event) => setAspectRatio(event.target.value)}
+                    data-testid="select-aspect-ratio"
+                  >
+                    {aspectRatios.map((ratio) => (
+                      <option value={ratio.value} key={ratio.value}>
+                        {ratio.label} ({ratio.value})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="field">
+                <label className="field-label" htmlFor="seed">
+                  Seed
+                  <span>11</span>
+                </label>
+                <input
+                  className="field-input"
+                  id="seed"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={seed}
+                  onChange={(event) => setSeed(event.target.value)}
+                  placeholder="z. B. 42"
+                  data-testid="input-seed"
+                />
+              </div>
+
+              <div className="field">
+                <label className="field-label" htmlFor="batch-count">
+                  Anzahl Bilder / Batch Count
+                  <span>12</span>
+                </label>
+                <input
+                  className="field-input"
+                  id="batch-count"
+                  type="number"
+                  min="1"
+                  max="99"
+                  step="1"
+                  value={batchCount}
+                  onChange={(event) => setBatchCount(event.target.value)}
+                  data-testid="input-batch-count"
+                />
+              </div>
+
+              <div className="field field-wide">
+                <label className="field-label" htmlFor="negative-prompt">
+                  Negative Prompt
+                  <span>13</span>
+                </label>
+                <textarea
+                  className="field-textarea"
+                  id="negative-prompt"
+                  value={negativePrompt}
+                  onChange={(event) => setNegativePrompt(event.target.value)}
+                  placeholder="z. B. no watermarks, distorted hands, extra fingers"
+                  rows={3}
+                  data-testid="textarea-negative-prompt"
+                />
+              </div>
+
+              <div className="field field-wide">
+                <div className="field-label">
+                  Referenz / Base Image
+                  <span>14</span>
+                </div>
+                {!referenceImage ? (
+                  <label className="upload-zone" htmlFor="reference-image">
+                    <ImagePlus size={20} />
+                    <span><strong>Bild hochladen</strong> oder hier auswählen</span>
+                    <small>JPG, PNG oder WEBP · dient als visuelle Referenz</small>
+                    <input
+                      id="reference-image"
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      onChange={handleReferenceImage}
+                      data-testid="input-reference-image"
+                    />
+                  </label>
+                ) : (
+                  <div className="reference-card">
+                    <img src={referencePreview} alt={`Vorschau von ${referenceImage.name}`} />
+                    <div className="reference-info">
+                      <strong>{referenceImage.name}</strong>
+                      <span>{Math.max(1, Math.round(referenceImage.size / 1024))} KB · wird als Referenz eingebunden</span>
+                    </div>
+                    <button
+                      className="remove-image"
+                      type="button"
+                      onClick={removeReferenceImage}
+                      aria-label="Referenzbild entfernen"
+                      data-testid="button-remove-reference"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="controls-footer">
-              <div className="hint"><Info size={14} /> Alle Werte bleiben in deinem Browser.</div>
+              <div className="hint"><Info size={14} /> Alle Werte und Bilder bleiben in deinem Browser.</div>
               <button className="action-button" type="button" onClick={generatePrompt} data-testid="button-generate">
                 <Sparkles size={16} />
                 Prompt erzeugen
